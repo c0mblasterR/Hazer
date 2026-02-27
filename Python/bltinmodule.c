@@ -3363,6 +3363,7 @@ static PyMethodDef builtin_methods[] = {
      METH_FASTCALL | METH_KEYWORDS, build_class_doc},
     BUILTIN___IMPORT___METHODDEF
     BUILTIN_ABS_METHODDEF
+    {"mutlak", builtin_abs, METH_O, NULL},
     BUILTIN_ALL_METHODDEF
     BUILTIN_ANY_METHODDEF
     BUILTIN_ASCII_METHODDEF
@@ -3384,11 +3385,13 @@ static PyMethodDef builtin_methods[] = {
     BUILTIN_HEX_METHODDEF
     BUILTIN_ID_METHODDEF
     BUILTIN_INPUT_METHODDEF
+    {"girdi", _PyCFunction_CAST(builtin_input), METH_FASTCALL, NULL},
     BUILTIN_ISINSTANCE_METHODDEF
     BUILTIN_ISSUBCLASS_METHODDEF
     {"iter", _PyCFunction_CAST(builtin_iter), METH_FASTCALL, iter_doc},
     BUILTIN_AITER_METHODDEF
     BUILTIN_LEN_METHODDEF
+    {"uzunluk", builtin_len, METH_O, NULL},
     BUILTIN_LOCALS_METHODDEF
     {"max", _PyCFunction_CAST(builtin_max), METH_FASTCALL | METH_KEYWORDS, max_doc},
     {"min", _PyCFunction_CAST(builtin_min), METH_FASTCALL | METH_KEYWORDS, min_doc},
@@ -3398,6 +3401,7 @@ static PyMethodDef builtin_methods[] = {
     BUILTIN_ORD_METHODDEF
     BUILTIN_POW_METHODDEF
     BUILTIN_PRINT_METHODDEF
+   {"yazdir", _PyCFunction_CAST(builtin_print), METH_FASTCALL | METH_KEYWORDS, NULL},
     BUILTIN_REPR_METHODDEF
     BUILTIN_ROUND_METHODDEF
     BUILTIN_SETATTR_METHODDEF

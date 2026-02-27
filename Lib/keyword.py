@@ -18,6 +18,9 @@ __all__ = ["iskeyword", "issoftkeyword", "kwlist", "softkwlist"]
 kwlist = [
     'False',
     'veya',
+    'dene',
+    'iken',
+    'kacis',
     'temin',
     'birlikte',
     'sinif',

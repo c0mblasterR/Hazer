@@ -1,0 +1,52 @@
+# Hazer Python - Calisan Test Senaryosu
+
+islev selamla(isim):
+    dondur f"Merhaba {isim}!"
+
+yazdir("--- Hazer Python Testi Basliyor ---")
+
+sayilar = [-5, -2, 0, 10, 20]
+durum = Dogru
+test_verisi = Bos
+
+# List Comprehension
+temiz_liste = [x eger x > 0 degilse 0 for x in sayilar]
+
+yazdir(f"Orijinal: {sayilar}")
+yazdir(f"Temizlenmis: {temiz_liste}")
+
+# 'denkse' testi (Nesne uzerinden)
+kontrol = Dogru eger (test_verisi denkse Bos) degilse Yanlis
+yazdir(f"Bosluk Kontrolu: {kontrol}")
+
+yazdir("\n--- Dongu ve Fonksiyon Testi ---")
+
+islev analiz_et(liste):
+    ozyinele eleman icinde liste:
+        eger eleman > 10:
+            yazdir(f"{eleman} sayisi 10'dan buyuktur.")
+        # 'elif' yerine 'degilse eger' yapini henüz eklemediysen normal 'if' gibi davranir
+        degilse:
+            eger eleman == 0:
+                yazdir("Sifir bulundu.")
+            degilse:
+                yazdir(f"{eleman} sayisi kucuk veya esittir.")
+
+analiz_et(temiz_liste)
+
+dene:
+    uzunluk_sonuc = uzunluk(temiz_liste)
+    yazdir(f"Listenin uzunlugu: {uzunluk_sonuc}")
+    mutlak_deger = mutlak(-42)
+    yazdir(f"Mutlak deger testi: {mutlak_deger}")
+except Exception as e:
+    yazdir(f"Bir hata olustu: {e}")
+
+yazdir("\n--- Test Basariyla Tamamlandi ---")
+
+
+
+
+
+
+

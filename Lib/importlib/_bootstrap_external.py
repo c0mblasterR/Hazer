@@ -226,7 +226,7 @@ MAGIC_NUMBER = _imp.pyc_magic_number_token.to_bytes(4, 'little')
 _PYCACHE = '__pycache__'
 _OPT = 'opt-'
 
-SOURCE_SUFFIXES = ['.py']
+SOURCE_SUFFIXES = ['.py','.hazer']
 if _MS_WINDOWS:
     SOURCE_SUFFIXES.append('.pyw')
 
