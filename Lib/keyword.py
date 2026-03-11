@@ -17,6 +17,7 @@ __all__ = ["iskeyword", "issoftkeyword", "kwlist", "softkwlist"]
 
 kwlist = [
     'False',
+    'atla',
     'veya',
     'dene',
     'iken',

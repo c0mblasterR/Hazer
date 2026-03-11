@@ -6,7 +6,8 @@ A deep-level modification of the **CPython (Python 3.15+)** core that enables wr
 
 ## 🚀 Overview
 
-This project is **not** a simple search-and-replace script. It involves direct intervention in Python's **PEG Parser**, **Lexer**, and **Grammar** layers. The language has been recompiled from C source code to recognize Turkish keywords at the engine level. It supports both original English and new Turkish syntax simultaneously (Bilingual) (e.g., you can use 'if' and 'eger' in the same file).
+This project is **not** a simple search and replace script. It involves direct intervention in Python's **PEG Parser**, **Lexer**, and **Grammar** layers. The language has been recompiled from C source code to recognize Turkish keywords at the engine level. It supports both the original English and the new Turkish syntax simultaneously (Bilingual) (for example, you can use ‘if’ and ‘eğer’ in the same file).
+Furthermore, with version v0.2.0, it offers UTF-8 and Turkish syntax support.
 
 ---
 
@@ -16,58 +17,9 @@ A linguistic experiment exploring the flexibility of Python's grammar layer.
 
 ---
 
-### 🛠️ Key Transformations
+## 📖 Language Reference
 
-The standard BNF grammar (`python.gram`) has been modified to support the following dual-syntax:
-
-## Simple Statements
-| Standard Python | Custom Turkish Syntax |
-| --- | --- |
-| `return` | `dondur` |
-| `yield` | `dondurdur` |
-| `break` | `kacis` |
-| `import` | `temin` |
-
-## Structural
-| Standard Python | Custom Turkish Syntax |
-| --- | --- |
-| `:` | `ise` |
-
-**Note: This is a clause terminator (used within if, for, def, etc.)**
-
-## Compound Statements
-| Standard Python | Custom Turkish Syntax |
-| --- | --- |
-| `with` | `birlikte` |
-| `else` | `degilse` |
-| `try` | `dene` |
-| `if` | `eger` |
-| `while` | `iken` |
-| `def` | `islev` |
-| `for` | `ozyinele` |
-| `class` | `sinif` |
-
-## Atom Expressions
-| Standard Python | Custom Turkish Syntax |
-| --- | --- |
-| `None` | `Bos` |
-| `True` | `Dogru` |
-| `False` | `Yanlis` |
-
-## Boolean Operators
-| Standard Python | Custom Turkish Syntax |
-| --- | --- |
-| `not` | `degil` |
-| `and` | `ve` |
-| `or` | `veya` |
-
-## Builtins
-| Standard Python | Custom Turkish Syntax |
-| --- | --- |
-| `input` | `girdi` |
-| `abs` | `mutlak` |
-| `len` | `uzunluk` |
-| `print` | `yazdir` |
+Review the [complete dictionary list](./SYNTAX.md) for all Turkish keywords, list methods, and type conversions available in Hazer v0.2.0.
 
 ---
 

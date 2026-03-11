@@ -121,25 +121,34 @@ simple_stmts[asdl_stmt_seq*]:
 simple_stmt[stmt_ty] (memo):
     | assignment
     | &"type" type_alias
+    | &"fırlat" raise_stmt
+    | &"döndür" return_stmt
+    | &"döndürdur" yield_stmt
+    | &"kaçış" break_stmt
+    | &"sürdür" continue_stmt
     | e=star_expressions { _PyAST_Expr(e, EXTRA) }
-    | &('return'|'dondur') return_stmt
+    | &'return' return_stmt
     | &('import' | 'from'| 'temin') import_stmt
     | &'raise' raise_stmt
-    | &'pass' pass_stmt
-    | &'del' del_stmt
-    | &('yield'|'dondurdur') yield_stmt
-    | &'assert' assert_stmt
-    | &('break'|'kacis') break_stmt
+    | &('pass'|'atla') pass_stmt
+    | &('del'|'azlet') del_stmt
+    | &'yield' yield_stmt
+    | &('assert'|'teyit') assert_stmt
+    | &'break' break_stmt
     | &'continue' continue_stmt
-    | &'global' global_stmt
-    | &'nonlocal' nonlocal_stmt
+    | &('global'|'umumi') global_stmt
+    | &('nonlocal'|'harici') nonlocal_stmt
 
 compound_stmt[stmt_ty]:
-    | &('def' | '@' | 'async' | 'islev') function_def
-    | &('if' | 'eger') if_stmt
-    | &('class' | '@'| 'sinif') class_def
+    | &"işlev" function_def
+    | &'ozyinele' for_stmt
+    | &('def' | '@' | 'async') function_def
+    | &'if' if_stmt
+    | &"eğer" if_stmt
+    | &('class' | '@') class_def
+    | &"sınıf" class_def
     | &('with' | 'async'| 'birlikte') with_stmt
-    | &('for' | 'async' | 'ozyinele') for_stmt
+    | &('for' | 'async') for_stmt
     | &('try'|'dene') try_stmt
     | &('while'|'iken') while_stmt
     | match_stmt
@@ -184,39 +193,44 @@ augassign[AugOperator*]:
 
 return_stmt[stmt_ty]:
     | 'return' a=[star_expressions] { _PyAST_Return(a, EXTRA) }
-    | 'dondur' a=[star_expressions] { _PyAST_Return(a, EXTRA) }
+    | "döndür" a=[star_expressions] { _PyAST_Return(a, EXTRA) }
 
 raise_stmt[stmt_ty]:
     | 'raise' a=expression 'from' b=expression { _PyAST_Raise(a, b, EXTRA) }
+    | "fırlat" a=expression 'from' b=expression { _PyAST_Raise(a, b, EXTRA) }
     | invalid_raise_stmt
     | 'raise' a=expression { _PyAST_Raise(a, NULL, EXTRA) }
+    | "fırlat" a=expression { _PyAST_Raise(a, NULL, EXTRA) }
     | 'raise' { _PyAST_Raise(NULL, NULL, EXTRA) }
+    | "fırlat" { _PyAST_Raise(NULL, NULL, EXTRA) }
 
 pass_stmt[stmt_ty]:
     | 'pass' { _PyAST_Pass(EXTRA) }
+    | 'atla' { _PyAST_Pass(EXTRA) }
 
 break_stmt[stmt_ty]:
     | 'break' { _PyAST_Break(EXTRA) }
-    | 'kacis' { _PyAST_Break(EXTRA) }
+    | "kaçış" { _PyAST_Break(EXTRA) }
 
 continue_stmt[stmt_ty]:
     | 'continue' { _PyAST_Continue(EXTRA) }
+    | "sürdür" { _PyAST_Continue(EXTRA) }
 
-global_stmt[stmt_ty]: 'global' a[asdl_expr_seq*]=','.NAME+ {
+global_stmt[stmt_ty]: ('global'|'umumi') a[asdl_expr_seq*]=','.NAME+ {
     _PyAST_Global(CHECK(asdl_identifier_seq*, _PyPegen_map_names_to_ids(p, a)), EXTRA) }
 
-nonlocal_stmt[stmt_ty]: 'nonlocal' a[asdl_expr_seq*]=','.NAME+ {
+nonlocal_stmt[stmt_ty]: ('nonlocal'|'harici') a[asdl_expr_seq*]=','.NAME+ {
     _PyAST_Nonlocal(CHECK(asdl_identifier_seq*, _PyPegen_map_names_to_ids(p, a)), EXTRA) }
 
 del_stmt[stmt_ty]:
-    | 'del' a=del_targets &(';' | NEWLINE) { _PyAST_Delete(a, EXTRA) }
+    | ('del'|'azlet') a=del_targets &(';' | NEWLINE) { _PyAST_Delete(a, EXTRA) }
     | invalid_del_stmt
 
 yield_stmt[stmt_ty]: y=yield_expr { _PyAST_Expr(y, EXTRA) }
 
 assert_stmt[stmt_ty]:
     | invalid_assert_stmt
-    | 'assert' a=expression b=[',' z=expression { z }] { _PyAST_Assert(a, b, EXTRA) }
+    | ('assert'|'teyit') a=expression b=[',' z=expression { z }] { _PyAST_Assert(a, b, EXTRA) }
 
 import_stmt[stmt_ty]:
     | invalid_import
@@ -278,7 +292,7 @@ class_def[stmt_ty]:
 
 class_def_raw[stmt_ty]:
     | invalid_class_def_raw
-    | ('class'|'sinif') a=NAME t=[type_params] b=['(' z=[arguments] ')' { z }] (':'|'ise') c=block {
+    | ('class'|"sınıf") a=NAME t=[type_params] b=['(' z=[arguments] ')' { z }] (':'|'ise') c=block {
         _PyAST_ClassDef(a->v.Name.id,
                      (b) ? ((expr_ty) b)->v.Call.args : NULL,
                      (b) ? ((expr_ty) b)->v.Call.keywords : NULL,
@@ -293,11 +307,11 @@ function_def[stmt_ty]:
 
 function_def_raw[stmt_ty]:
     | invalid_def_raw
-    | 'islev' n=NAME t=[type_params] '(' params=[params] ')' a=['->' z=expression { z }] (':'|'ise') tc=[func_type_comment] b=block {
+    | "işlev" n=NAME t=[type_params] '(' params=[params] ')' a=['->' z=expression { z }] (':'|'ise') tc=[func_type_comment] b=block {
         _PyAST_FunctionDef(n->v.Name.id, (params) ? params : CHECK(arguments_ty, _PyPegen_empty_arguments(p)), b, NULL, a, NEW_TYPE_COMMENT(p, tc), t, EXTRA) }
     | 'def' n=NAME t=[type_params] '(' params=[params] ')' a=['->' z=expression { z }] (':'|'ise') tc=[func_type_comment] b=block {
         _PyAST_FunctionDef(n->v.Name.id, (params) ? params : CHECK(arguments_ty, _PyPegen_empty_arguments(p)), b, NULL, a, NEW_TYPE_COMMENT(p, tc), t, EXTRA) }
-    | 'async' 'islev' n=NAME t=[type_params] '(' params=[params] ')' a=['->' z=expression { z }] (':'|'ise') tc=[func_type_comment] b=block {
+    | 'async' "işlev" n=NAME t=[type_params] '(' params=[params] ')' a=['->' z=expression { z }] (':'|'ise') tc=[func_type_comment] b=block {
         CHECK_VERSION(stmt_ty, 5, "Async functions are", _PyAST_AsyncFunctionDef(n->v.Name.id, (params) ? params : CHECK(arguments_ty, _PyPegen_empty_arguments(p)), b, NULL, a, NEW_TYPE_COMMENT(p, tc), t, EXTRA)) }
     | 'async' 'def' n=NAME t=[type_params] '(' params=[params] ')' a=['->' z=expression { z }] (':'|'ise') tc=[func_type_comment] b=block {
         CHECK_VERSION(stmt_ty, 5, "Async functions are", _PyAST_AsyncFunctionDef(n->v.Name.id, (params) ? params : CHECK(arguments_ty, _PyPegen_empty_arguments(p)), b, NULL, a, NEW_TYPE_COMMENT(p, tc), t, EXTRA)) }
@@ -379,9 +393,12 @@ default[expr_ty]: '=' a=expression { a } | invalid_default
 
 if_stmt[stmt_ty]:
     | invalid_if_stmt
-    | ('if' | 'eger') a=named_expression (':'|'ise') b=block c=elif_stmt {
+    | 'if' a=named_expression (':'|'ise') b=block c=elif_stmt {
         _PyAST_If(a, b, CHECK(asdl_stmt_seq*, _PyPegen_singleton_seq(p, c)), EXTRA) }
-    | ('if' | 'eger') a=named_expression (':'|'ise') b=block c=[else_block] { _PyAST_If(a, b, c, EXTRA) }
+    | "eğer" a=named_expression (':'|'ise') b=block c=elif_stmt {
+        _PyAST_If(a, b, CHECK(asdl_stmt_seq*, _PyPegen_singleton_seq(p, c)), EXTRA) }
+    | 'if' a=named_expression (':'|'ise') b=block c=[else_block] { _PyAST_If(a, b, c, EXTRA) }
+    | "eğer" a=named_expression (':'|'ise') b=block c=[else_block] { _PyAST_If(a, b, c, EXTRA) }
 elif_stmt[stmt_ty]:
     | invalid_elif_stmt
     | 'elif' a=named_expression (':'|'ise') b=block c=elif_stmt {
@@ -403,9 +420,13 @@ while_stmt[stmt_ty]:
 
 for_stmt[stmt_ty]:
     | invalid_for_stmt
-    | ('for'|'ozyinele') t=star_targets ('in'|'icinde') ~ ex=star_expressions (':'|'ise') tc=[TYPE_COMMENT] b=block el=[else_block] {
+    | 'for' t=star_targets ('in'|"içinde") ~ ex=star_expressions (':'|'ise') tc=[TYPE_COMMENT] b=block el=[else_block] {
         _PyAST_For(t, ex, b, el, NEW_TYPE_COMMENT(p, tc), EXTRA) }
-    | 'async' ('for'|'ozyinele') t=star_targets ('in'|'icinde') ~ ex=star_expressions (':'|'ise') tc=[TYPE_COMMENT] b=block el=[else_block] {
+    | 'ozyinele' t=star_targets ('in'|"içinde") ~ ex=star_expressions (':'|'ise') tc=[TYPE_COMMENT] b=block el=[else_block] {
+        _PyAST_For(t, ex, b, el, NEW_TYPE_COMMENT(p, tc), EXTRA) }
+    | 'async' 'for' t=star_targets ('in'|"içinde") ~ ex=star_expressions (':'|'ise') tc=[TYPE_COMMENT] b=block el=[else_block] {
+        CHECK_VERSION(stmt_ty, 5, "Async for loops are", _PyAST_AsyncFor(t, ex, b, el, NEW_TYPE_COMMENT(p, tc), EXTRA)) }
+    | 'async' 'ozyinele' t=star_targets ('in'|"içinde") ~ ex=star_expressions (':'|'ise') tc=[TYPE_COMMENT] b=block el=[else_block] {
         CHECK_VERSION(stmt_ty, 5, "Async for loops are", _PyAST_AsyncFor(t, ex, b, el, NEW_TYPE_COMMENT(p, tc), EXTRA)) }
     | invalid_for_target
 
@@ -446,25 +467,25 @@ try_stmt[stmt_ty]:
 
 except_block[excepthandler_ty]:
     | invalid_except_stmt_indent
-    | 'except' e=expression (':'|'ise') b=block {
+    | ('except'|'yakala') e=expression (':'|'ise') b=block {
         _PyAST_ExceptHandler(e, NULL, b, EXTRA) }
-    | 'except' e=expression 'as' t=NAME (':'|'ise') b=block {
+    | ('except'|'yakala') e=expression ('as'|'olarak') t=NAME (':'|'ise') b=block {
         _PyAST_ExceptHandler(e, ((expr_ty) t)->v.Name.id, b, EXTRA) }
-    | 'except' e=expressions (':'|'ise') b=block {
+    | ('except'|'yakala') e=expressions (':'|'ise') b=block {
         CHECK_VERSION(
             excepthandler_ty,
             14,
             "except expressions without parentheses are",
             _PyAST_ExceptHandler(e, NULL, b, EXTRA)) }
-    | 'except' (':'|'ise') b=block { _PyAST_ExceptHandler(NULL, NULL, b, EXTRA) }
+    | ('except'|'yakala') (':'|'ise') b=block { _PyAST_ExceptHandler(NULL, NULL, b, EXTRA) }
     | invalid_except_stmt
 except_star_block[excepthandler_ty]:
     | invalid_except_star_stmt_indent
-    | 'except' '*' e=expression (':'|'ise') b=block {
+    | ('except'|'yakala') '*' e=expression (':'|'ise') b=block {
         _PyAST_ExceptHandler(e, NULL, b, EXTRA) }
-    | 'except' '*' e=expression 'as' t=NAME (':'|'ise') b=block {
+    | ('except'|'yakala') '*' e=expression ('as'|'olarak') t=NAME (':'|'ise') b=block {
         _PyAST_ExceptHandler(e, ((expr_ty) t)->v.Name.id, b, EXTRA) }
-    | 'except' '*' e=expressions (':'|'ise') b=block {
+    | ('except'|'yakala') '*' e=expressions (':'|'ise') b=block {
         CHECK_VERSION(
             excepthandler_ty,
             14,
@@ -473,13 +494,13 @@ except_star_block[excepthandler_ty]:
     | invalid_except_star_stmt
 finally_block[asdl_stmt_seq*]:
     | invalid_finally_stmt
-    | 'finally' &&(':'|'ise') a=block { a }
+    | ('finally'|'nihayet') &&(':'|'ise') a=block { a }
 
 # Match statement
 # ---------------
 
 match_stmt[stmt_ty]:
-    | "match" subject=subject_expr (':'|'ise') NEWLINE INDENT cases[asdl_match_case_seq*]=case_block+ DEDENT {
+    | ("match"|"eslestir") subject=subject_expr (':'|'ise') NEWLINE INDENT cases[asdl_match_case_seq*]=case_block+ DEDENT {
         CHECK_VERSION(stmt_ty, 10, "Pattern matching is", _PyAST_Match(subject, cases, EXTRA)) }
     | invalid_match_stmt
 
@@ -490,7 +511,7 @@ subject_expr[expr_ty]:
 
 case_block[match_case_ty]:
     | invalid_case_block
-    | "case" pattern=patterns guard=guard? (':'|'ise') body=block {
+    | ("case"|"durum") pattern=patterns guard=guard? (':'|'ise') body=block {
         _PyAST_match_case(pattern, guard, body, p->arena) }
 
 guard[expr_ty]: 'if' guard=named_expression { guard }
@@ -714,11 +735,13 @@ expression[expr_ty] (memo):
     | lambdef
 
 if_expression[expr_ty]:
-    | a=disjunction ('if'|'eger') b=disjunction ('else'|'degilse') c=expression { _PyAST_IfExp(b, a, c, EXTRA) }
+    | a=disjunction ('if'|"eğer") b=disjunction ('else'|'degilse') c=expression { _PyAST_IfExp(b, a, c, EXTRA) }
 
 yield_expr[expr_ty]:
-    | ('yield'|'dondurdur') 'from' a=expression { _PyAST_YieldFrom(a, EXTRA) }
-    | ('yield'|'dondurdur') a=[star_expressions] { _PyAST_Yield(a, EXTRA) }
+    | 'yield' 'from' a=expression { _PyAST_YieldFrom(a, EXTRA) }
+    | "döndürdur" 'from' a=expression { _PyAST_YieldFrom(a, EXTRA) }
+    | 'yield' a=[star_expressions] { _PyAST_Yield(a, EXTRA) }
+    | "döndürdur" a=[star_expressions] { _PyAST_Yield(a, EXTRA) }
 
 star_expressions[expr_ty]:
     | a=star_expression b=(',' c=star_expression { c })+ [','] {

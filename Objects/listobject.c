@@ -3582,6 +3582,23 @@ static PyMethodDef list_methods[] = {
     LIST_COUNT_METHODDEF
     LIST_REVERSE_METHODDEF
     LIST_SORT_METHODDEF
+    /* --- Hazer Python Aliasları (Modern Protokol) --- */
+    {"ekle",            (PyCFunction)list_append,  METH_O,            "Listeye eleman ekler."},
+    {"sil",             (PyCFunction)list_remove,  METH_O,            "Elemanı siler."},
+    {"say",             (PyCFunction)list_count,   METH_O,            "Eleman sayısını döndürür."},
+    {"genislet",        (PyCFunction)list_extend,  METH_O,            "Listeye başka bir iterable'ın elemanlarını ekler."},
+    
+    /* Buradakiler METH_FASTCALL gerektirir */
+    {"dizin",           (PyCFunction)(void(*)(void))list_index,  METH_FASTCALL | METH_KEYWORDS,  "İndis döndürür."},
+    {"araya_ekle",      (PyCFunction)(void(*)(void))list_insert, METH_FASTCALL | METH_KEYWORDS,  "Araya ekleme yapar."},
+    {"cikar",           (PyCFunction)(void(*)(void))list_pop,    METH_FASTCALL | METH_KEYWORDS,  "Elemanı çıkarır."},
+    {"sirala",          (PyCFunction)(void(*)(void))list_sort,   METH_FASTCALL | METH_KEYWORDS,  "Sıralama yapar."},
+
+    /* Bunlar argümansız olduğu için NOARGS kalabilir */
+    {"ters_cevir",      (PyCFunction)list_reverse,  METH_NOARGS,       "Ters çevirir."},
+    {"kopyala",         (PyCFunction)list_copy,     METH_NOARGS,       "Kopyalar."},
+    {"temizle",         (PyCFunction)py_list_clear, METH_NOARGS,       py_list_clear__doc__},
+
     {"__class_getitem__", Py_GenericAlias, METH_O|METH_CLASS, PyDoc_STR("See PEP 585")},
     {NULL,              NULL}           /* sentinel */
 };

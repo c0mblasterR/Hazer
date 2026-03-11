@@ -3122,8 +3122,26 @@ static struct PyModuleDef mathmodule = {
     .m_slots = math_slots,
 };
 
+PyMODINIT_FUNC PyInit_matematik(void);
+
+static struct PyModuleDef matematikmodule = {
+    PyModuleDef_HEAD_INIT,
+    .m_name = "matematik",
+    .m_doc = module_doc,
+    .m_size = 0,
+    .m_methods = math_methods,
+    .m_slots = math_slots,
+};
+
+
 PyMODINIT_FUNC
 PyInit_math(void)
 {
     return PyModuleDef_Init(&mathmodule);
+}
+
+PyMODINIT_FUNC
+PyInit_matematik(void)
+{
+    return PyModuleDef_Init(&matematikmodule);
 }
