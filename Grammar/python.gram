@@ -406,7 +406,7 @@ elif_stmt[stmt_ty]:
     | 'elif' a=named_expression (':'|'ise') b=block c=[else_block] { _PyAST_If(a, b, c, EXTRA) }
 else_block[asdl_stmt_seq*]:
     | invalid_else_stmt
-    | ('else' | 'degilse') &&(':'|'ise') b=block { b }
+    | ('else' | "değilse") &&(':'|'ise') b=block { b }
 
 # While statement
 # ---------------

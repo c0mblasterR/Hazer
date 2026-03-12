@@ -17,6 +17,7 @@ The standard BNF grammar (`python.gram`) has been modified to support the follow
 | `continue` | `sürdür` |
 | `global` | `umumi` |
 | `nonlocal` | `harici` |
+| `import` | `temin` |
 
 ## Structural
 | Standard Python | Custom Turkish Syntax |
@@ -32,6 +33,7 @@ The standard BNF grammar (`python.gram`) has been modified to support the follow
 | `else` | `değilse` |
 | `try` | `dene` |
 | `if` | `eğer` |
+| `else` | `değilse` |
 | `while` | `iken` |
 | `def` | `işlev` |
 | `for` | `ozyinele` |
