@@ -1,4 +1,0 @@
-durum = True
-
-eğer durum:
-	print("türkçe python da çalışıyor!")

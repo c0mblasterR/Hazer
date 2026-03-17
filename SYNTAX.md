@@ -1,4 +1,4 @@
-### 🛠️ Key Transformations (V0.2.0)
+# 🛠️ Key Transformations (V0.3.0)
 
 The standard BNF grammar (`python.gram`) has been modified to support the following dual-syntax:
 
@@ -30,7 +30,6 @@ The standard BNF grammar (`python.gram`) has been modified to support the follow
 | Standard Python | Custom Turkish Syntax |
 | --- | --- |
 | `with` | `birlikte` |
-| `else` | `değilse` |
 | `try` | `dene` |
 | `if` | `eğer` |
 | `else` | `değilse` |
@@ -90,5 +89,117 @@ The standard BNF grammar (`python.gram`) has been modified to support the follow
 | Standard Python | Custom Turkish Syntax |
 | --- | --- |
 | `import math` | `temin matematik` |
+| `import random` | `temin rastgele` |
+
+---
+
+# matematik (math) — Turkish Alias Proposals
+
+## Constants
+| math | matematik |
+|------|-----------|
+| `math.pi` | `matematik.pi` |
+| `math.e` | `matematik.e` |
+| `math.tau` | `matematik.tau` |
+| `math.inf` | `matematik.sonsuz` |
+| `math.nan` | `matematik.tanimsiz` |
+
+## Rounding & Absolute Value
+| math | matematik |
+|------|-----------|
+| `math.floor` | `matematik.taban` |
+| `math.ceil` | `matematik.tavan` |
+| `math.trunc` | `matematik.kirp` |
+| `math.fabs` | `matematik.mutlak` |
+
+## Power & Logarithm
+| math | matematik |
+|------|-----------|
+| `math.sqrt` | `matematik.karekök` |
+| `math.pow` | `matematik.üs` |
+| `math.exp` | `matematik.üstel` |
+| `math.log` | `matematik.logaritma` |
+| `math.log2` | `matematik.log2` |
+| `math.log10` | `matematik.log10` |
+
+## Trigonometry
+| math | matematik |
+|------|-----------|
+| `math.sin` | `matematik.sin` |
+| `math.cos` | `matematik.kos` |
+| `math.tan` | `matematik.tan` |
+| `math.asin` | `matematik.arcsin` |
+| `math.acos` | `matematik.arckos` |
+| `math.atan` | `matematik.arctan` |
+| `math.atan2` | `matematik.arctan2` |
+| `math.degrees` | `matematik.dereceye_cevir` |
+| `math.radians` | `matematik.radyana_cevir` |
+| `math.hypot` | `matematik.hipotenüs` |
+
+## Number Theory
+| math | matematik |
+|------|-----------|
+| `math.factorial` | `matematik.faktoriyel` |
+| `math.gcd` | `matematik.obeb` |
+| `math.lcm` | `matematik.okek` |
+| `math.comb` | `matematik.komb` |
+| `math.perm` | `matematik.perm` |
+| `math.isfinite` | `matematik.sonlu_mu` |
+| `math.isinf` | `matematik.sonsuz_mu` |
+| `math.isnan` | `matematik.tanimsiz_mi` |
+| `math.isclose` | `matematik.yakin_mi` |
+| `math.remainder` | `matematik.kalan` |
+| `math.fmod` | `matematik.mod` |
+| `math.modf` | `matematik.ayrıştır` |
+| `math.frexp` | `matematik.mantis` |
+| `math.ldexp` | `matematik.ikili_üs` |
+| `math.fsum` | `matematik.kesin_toplam` |
+| `math.prod` | `matematik.çarpım` |
+| `math.copysign` | `matematik.işaret_kopyala` |
+| `math.nextafter` | `matematik.sonraki` |
+| `math.ulp` | `matematik.ulp` |
+
+---
+
+# rastgele (random) Module
+
+## Basic Functions
+| Standard Python | Custom Turkish Syntax |
+| --- | --- |
+| `random.random` | `rastgele.sayi` |
+| `random.randint` | `rastgele.tam_sayi` |
+| `random.randrange` | `rastgele.aralik` |
+| `random.uniform` | `rastgele.ondalik` |
+| `random.randbytes` | `rastgele.bayt` |
+| `random.getrandbits` | `rastgele.bit` |
+| `random.triangular` | `rastgele.ucgen` |
+
+## Collection Operations
+| Standard Python | Custom Turkish Syntax |
+| --- | --- |
+| `random.choice` | `rastgele.sec` |
+| `random.choices` | `rastgele.secimler` |
+| `random.sample` | `rastgele.ornekle` |
+| `random.shuffle` | `rastgele.karistir` |
+
+## Situation Management
+| Standard Python | Custom Turkish Syntax |
+| --- | --- |
+| `random.seed` | `rastgele.tohum` |
+| `random.getstate` | `rastgele.durum_al` |
+| `random.setstate` | `rastgele.durum_set` |
+
+## Distribution Functions
+| Standard Python | Custom Turkish Syntax |
+| --- | --- |
+| `random.gauss` | `rastgele.gauss` |
+| `random.normalvariate` | `rastgele.normalvariate` |
+| `random.lognormvariate` | `rastgele.lognormvariate` |
+| `random.expovariate` | `rastgele.expovariate` |
+| `random.gammavariate` | `rastgele.gammavariate` |
+| `random.betavariate` | `rastgele.betavariate` |
+| `random.paretovariate` | `rastgele.paretovariate` |
+| `random.vonmisesvariate` | `rastgele.vonmisesvariate` |
+| `random.weibullvariate` | `rastgele.weibullvariate` |
 
 ---

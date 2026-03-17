@@ -1228,12 +1228,17 @@ error:
 
 static PyMethodDef math_integer_methods[] = {
     MATH_INTEGER_COMB_METHODDEF
+    {"komb",        _PyCFunction_CAST(math_integer_comb),      METH_FASTCALL, math_integer_comb__doc__},
     MATH_INTEGER_FACTORIAL_METHODDEF
+    {"faktoriyel",  (PyCFunction)math_integer_factorial,       METH_O,        math_integer_factorial__doc__},
     MATH_INTEGER_GCD_METHODDEF
+    {"obeb",        _PyCFunction_CAST(math_integer_gcd),       METH_FASTCALL, math_integer_gcd__doc__},
     MATH_INTEGER_ISQRT_METHODDEF
     MATH_INTEGER_LCM_METHODDEF
+    {"okek",        _PyCFunction_CAST(math_integer_lcm),       METH_FASTCALL, math_integer_lcm__doc__},
     MATH_INTEGER_PERM_METHODDEF
-    {NULL,              NULL}           /* sentinel */
+    {"perm",        _PyCFunction_CAST(math_integer_perm),      METH_FASTCALL, math_integer_perm__doc__},
+    {NULL,          NULL}
 };
 
 static int

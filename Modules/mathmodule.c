@@ -3027,11 +3027,15 @@ math_exec(PyObject *module)
     } while(0)
 
     IMPORT_FROM_INTMATH(comb);
+    IMPORT_FROM_INTMATH(komb);        // ekle
     IMPORT_FROM_INTMATH(factorial);
+    IMPORT_FROM_INTMATH(faktoriyel);  // ekle
     IMPORT_FROM_INTMATH(gcd);
+    IMPORT_FROM_INTMATH(obeb);        // ekle
     IMPORT_FROM_INTMATH(isqrt);
     IMPORT_FROM_INTMATH(lcm);
-    IMPORT_FROM_INTMATH(perm);
+    IMPORT_FROM_INTMATH(okek);        // ekle
+    IMPORT_FROM_INTMATH(perm);        // perm zaten var, alias yok
     if (_PyImport_SetModuleString("math.integer", intmath) < 0) {
         Py_DECREF(intmath);
         return -1;
@@ -3099,6 +3103,106 @@ static PyMethodDef math_methods[] = {
     MATH_PROD_METHODDEF
     MATH_NEXTAFTER_METHODDEF
     MATH_ULP_METHODDEF
+/* ============================================================
+   Hazer v0.3.0 — matematik Turkish Aliases (DÜZELTILDI)
+   mathmodule.c -> static PyMethodDef math_methods[] tablosuna ekle.
+   ============================================================ */
+
+/* --- KATEGORI 1: Normal format (mathmodule.c'de doğrudan tanımlı) --- */
+
+/* sqrt -> karekök */
+{"karekök",         math_sqrt,                                      METH_O,                      math_sqrt_doc},
+
+/* cos -> kos */
+{"kos",             math_cos,                                       METH_O,                      math_cos_doc},
+
+/* acos -> arckos */
+{"arckos",          math_acos,                                      METH_O,                      math_acos_doc},
+
+/* asin -> arcsin */
+{"arcsin",          math_asin,                                      METH_O,                      math_asin_doc},
+
+/* atan -> arctan */
+{"arctan",          math_atan,                                      METH_O,                      math_atan_doc},
+
+/* atan2 -> arctan2 */
+{"arctan2",         _PyCFunction_CAST(math_atan2),                  METH_FASTCALL,               math_atan2_doc},
+
+/* exp -> üstel */
+{"üstel",           math_exp,                                       METH_O,                      math_exp_doc},
+
+/* log -> logaritma */
+{"logaritma",       _PyCFunction_CAST(math_log),                    METH_FASTCALL,               math_log_doc},
+
+/* fabs -> mutlak */
+{"mutlak",          math_fabs,                                      METH_O,                      math_fabs_doc},
+
+/* remainder -> kalan */
+{"kalan",           _PyCFunction_CAST(math_remainder),              METH_FASTCALL,               math_remainder_doc},
+
+/* copysign -> işaret_kopyala */
+{"işaret_kopyala",  _PyCFunction_CAST(math_copysign),               METH_FASTCALL,               math_copysign_doc},
+
+
+/* --- KATEGORI 2: Clinic macro tabanlı (doğru doc ve METH_ tipi düzeltildi) --- */
+
+/* MATH_CEIL_METHODDEF altına -> tavan */
+{"tavan",           (PyCFunction)math_ceil,                         METH_O,                      math_ceil__doc__},
+
+/* MATH_FLOOR_METHODDEF altına -> taban */
+{"taban",           (PyCFunction)math_floor,                        METH_O,                      math_floor__doc__},
+
+/* MATH_TRUNC_METHODDEF altına -> kirp */
+{"kirp",            (PyCFunction)math_trunc,                        METH_O,                      math_trunc__doc__},
+
+/* MATH_DEGREES_METHODDEF altına -> dereceye_cevir */
+{"dereceye_cevir",  (PyCFunction)math_degrees,                      METH_O,                      math_degrees__doc__},
+
+/* MATH_RADIANS_METHODDEF altına -> radyana_cevir */
+{"radyana_cevir",   (PyCFunction)math_radians,                      METH_O,                      math_radians__doc__},
+
+/* MATH_POW_METHODDEF altına -> üs */
+{"üs",              _PyCFunction_CAST(math_pow),                    METH_FASTCALL,               math_pow__doc__},
+
+/* MATH_HYPOT_METHODDEF altına -> hipotenüs */
+{"hipotenüs",       _PyCFunction_CAST(math_hypot),                  METH_FASTCALL,               math_hypot__doc__},
+
+/* MATH_ISFINITE_METHODDEF altına -> sonlu_mu */
+{"sonlu_mu",        (PyCFunction)math_isfinite,                     METH_O,                      math_isfinite__doc__},
+
+/* MATH_ISINF_METHODDEF altına -> sonsuz_mu */
+{"sonsuz_mu",       (PyCFunction)math_isinf,                        METH_O,                      math_isinf__doc__},
+
+/* MATH_ISNAN_METHODDEF altına -> tanimsiz_mi */
+{"tanimsiz_mi",     (PyCFunction)math_isnan,                        METH_O,                      math_isnan__doc__},
+
+/* MATH_ISCLOSE_METHODDEF altına -> yakin_mi
+   ⚠️ isclose keyword argüman alıyor: METH_FASTCALL|METH_KEYWORDS */
+{"yakin_mi",        _PyCFunction_CAST(math_isclose),                METH_FASTCALL|METH_KEYWORDS, math_isclose__doc__},
+
+/* MATH_FMOD_METHODDEF altına -> mod */
+{"mod",             _PyCFunction_CAST(math_fmod),                   METH_FASTCALL,               math_fmod__doc__},
+
+/* MATH_MODF_METHODDEF altına -> ayrıştır */
+{"ayrıştır",        (PyCFunction)math_modf,                         METH_O,                      math_modf__doc__},
+
+/* MATH_FREXP_METHODDEF altına -> mantis */
+{"mantis",          (PyCFunction)math_frexp,                        METH_O,                      math_frexp__doc__},
+
+/* MATH_LDEXP_METHODDEF altına -> ikili_üs */
+{"ikili_üs",        _PyCFunction_CAST(math_ldexp),                  METH_FASTCALL,               math_ldexp__doc__},
+
+/* MATH_FSUM_METHODDEF altına -> kesin_toplam */
+{"kesin_toplam",    (PyCFunction)math_fsum,                         METH_O,                      math_fsum__doc__},
+
+/* MATH_PROD_METHODDEF altına -> çarpım
+   ⚠️ prod keyword argüman alıyor: METH_FASTCALL|METH_KEYWORDS */
+{"çarpım",          _PyCFunction_CAST(math_prod),                   METH_FASTCALL|METH_KEYWORDS, math_prod__doc__},
+
+/* MATH_NEXTAFTER_METHODDEF altına -> sonraki
+   ⚠️ nextafter keyword argüman alıyor: METH_FASTCALL|METH_KEYWORDS */
+{"sonraki",         _PyCFunction_CAST(math_nextafter),              METH_FASTCALL|METH_KEYWORDS, math_nextafter__doc__},
+
     {NULL,              NULL}           /* sentinel */
 };
 

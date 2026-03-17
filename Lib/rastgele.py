@@ -1,0 +1,27 @@
+# Hazer v0.3.0 — rastgele (random) wrapper modülü
+from random import *
+from random import (
+    random as sayi,
+    randint as tam_sayi,
+    randrange as aralik,
+    uniform as ondalik,
+    randbytes as bayt,
+    getrandbits as bit,
+    triangular as ucgen,
+    choice as sec,
+    choices as secimler,
+    sample as ornekle,
+    shuffle as karistir,
+    seed as tohum,
+    getstate as durum_al,
+    setstate as durum_set,
+    gauss,
+    normalvariate,
+    lognormvariate,
+    expovariate,
+    gammavariate,
+    betavariate,
+    paretovariate,
+    vonmisesvariate,
+    weibullvariate,
+)

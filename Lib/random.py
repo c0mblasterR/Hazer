@@ -1074,6 +1074,30 @@ def main(arg_list: list[str] | None = None) -> int | str:
 
     return help_text
 
+# Hazer v0.3.0 — rastgele Turkish Aliases
+sayi = random
+tam_sayi = randint
+aralik = randrange
+ondalik = uniform
+bayt = randbytes
+bit = getrandbits
+ucgen = triangular
+sec = choice
+secimler = choices
+ornekle = sample
+karistir = shuffle
+tohum = seed
+durum_al = getstate
+durum_set = setstate
+gauss = gauss
+normalvariate = normalvariate
+lognormvariate = lognormvariate
+expovariate = expovariate
+gammavariate = gammavariate
+betavariate = betavariate
+paretovariate = paretovariate
+vonmisesvariate = vonmisesvariate
+weibullvariate = weibullvariate
 
 if __name__ == '__main__':
     print(main())
