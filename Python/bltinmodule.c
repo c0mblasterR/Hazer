@@ -3407,6 +3407,7 @@ static PyMethodDef builtin_methods[] = {
     BUILTIN_SETATTR_METHODDEF
     BUILTIN_SORTED_METHODDEF
     BUILTIN_SUM_METHODDEF
+    {"toplam", _PyCFunction_CAST(builtin_sum), METH_FASTCALL | METH_KEYWORDS, NULL},
     {"vars",            builtin_vars,       METH_VARARGS, vars_doc},
     {NULL,              NULL},
 };

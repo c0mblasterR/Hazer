@@ -121,11 +121,11 @@ simple_stmts[asdl_stmt_seq*]:
 simple_stmt[stmt_ty] (memo):
     | assignment
     | &"type" type_alias
-    | &"fırlat" raise_stmt
-    | &"döndür" return_stmt
-    | &"döndürdur" yield_stmt
-    | &"kaçış" break_stmt
-    | &"sürdür" continue_stmt
+    | &'fırlat' raise_stmt
+    | &'döndür' return_stmt
+    | &'döndürdur' yield_stmt
+    | &'kaçış' break_stmt
+    | &'sürdür' continue_stmt
     | e=star_expressions { _PyAST_Expr(e, EXTRA) }
     | &'return' return_stmt
     | &('import' | 'from'| 'temin') import_stmt
@@ -140,13 +140,13 @@ simple_stmt[stmt_ty] (memo):
     | &('nonlocal'|'harici') nonlocal_stmt
 
 compound_stmt[stmt_ty]:
-    | &"işlev" function_def
+    | &'işlev' function_def
     | &'ozyinele' for_stmt
     | &('def' | '@' | 'async') function_def
     | &'if' if_stmt
-    | &"eğer" if_stmt
+    | &'eğer' if_stmt
     | &('class' | '@') class_def
-    | &"sınıf" class_def
+    | &'sınıf' class_def
     | &('with' | 'async'| 'birlikte') with_stmt
     | &('for' | 'async') for_stmt
     | &('try'|'dene') try_stmt
@@ -193,16 +193,16 @@ augassign[AugOperator*]:
 
 return_stmt[stmt_ty]:
     | 'return' a=[star_expressions] { _PyAST_Return(a, EXTRA) }
-    | "döndür" a=[star_expressions] { _PyAST_Return(a, EXTRA) }
+    | 'döndür' a=[star_expressions] { _PyAST_Return(a, EXTRA) }
 
 raise_stmt[stmt_ty]:
     | 'raise' a=expression 'from' b=expression { _PyAST_Raise(a, b, EXTRA) }
-    | "fırlat" a=expression 'from' b=expression { _PyAST_Raise(a, b, EXTRA) }
+    | 'fırlat' a=expression 'from' b=expression { _PyAST_Raise(a, b, EXTRA) }
     | invalid_raise_stmt
     | 'raise' a=expression { _PyAST_Raise(a, NULL, EXTRA) }
-    | "fırlat" a=expression { _PyAST_Raise(a, NULL, EXTRA) }
+    | 'fırlat' a=expression { _PyAST_Raise(a, NULL, EXTRA) }
     | 'raise' { _PyAST_Raise(NULL, NULL, EXTRA) }
-    | "fırlat" { _PyAST_Raise(NULL, NULL, EXTRA) }
+    | 'fırlat' { _PyAST_Raise(NULL, NULL, EXTRA) }
 
 pass_stmt[stmt_ty]:
     | 'pass' { _PyAST_Pass(EXTRA) }
@@ -210,11 +210,11 @@ pass_stmt[stmt_ty]:
 
 break_stmt[stmt_ty]:
     | 'break' { _PyAST_Break(EXTRA) }
-    | "kaçış" { _PyAST_Break(EXTRA) }
+    | 'kaçış' { _PyAST_Break(EXTRA) }
 
 continue_stmt[stmt_ty]:
     | 'continue' { _PyAST_Continue(EXTRA) }
-    | "sürdür" { _PyAST_Continue(EXTRA) }
+    | 'sürdür' { _PyAST_Continue(EXTRA) }
 
 global_stmt[stmt_ty]: ('global'|'umumi') a[asdl_expr_seq*]=','.NAME+ {
     _PyAST_Global(CHECK(asdl_identifier_seq*, _PyPegen_map_names_to_ids(p, a)), EXTRA) }
@@ -292,7 +292,7 @@ class_def[stmt_ty]:
 
 class_def_raw[stmt_ty]:
     | invalid_class_def_raw
-    | ('class'|"sınıf") a=NAME t=[type_params] b=['(' z=[arguments] ')' { z }] (':'|'ise') c=block {
+    | ('class'|'sınıf') a=NAME t=[type_params] b=['(' z=[arguments] ')' { z }] (':'|'ise') c=block {
         _PyAST_ClassDef(a->v.Name.id,
                      (b) ? ((expr_ty) b)->v.Call.args : NULL,
                      (b) ? ((expr_ty) b)->v.Call.keywords : NULL,
@@ -307,11 +307,11 @@ function_def[stmt_ty]:
 
 function_def_raw[stmt_ty]:
     | invalid_def_raw
-    | "işlev" n=NAME t=[type_params] '(' params=[params] ')' a=['->' z=expression { z }] (':'|'ise') tc=[func_type_comment] b=block {
+    | 'işlev' n=NAME t=[type_params] '(' params=[params] ')' a=['->' z=expression { z }] (':'|'ise') tc=[func_type_comment] b=block {
         _PyAST_FunctionDef(n->v.Name.id, (params) ? params : CHECK(arguments_ty, _PyPegen_empty_arguments(p)), b, NULL, a, NEW_TYPE_COMMENT(p, tc), t, EXTRA) }
     | 'def' n=NAME t=[type_params] '(' params=[params] ')' a=['->' z=expression { z }] (':'|'ise') tc=[func_type_comment] b=block {
         _PyAST_FunctionDef(n->v.Name.id, (params) ? params : CHECK(arguments_ty, _PyPegen_empty_arguments(p)), b, NULL, a, NEW_TYPE_COMMENT(p, tc), t, EXTRA) }
-    | 'async' "işlev" n=NAME t=[type_params] '(' params=[params] ')' a=['->' z=expression { z }] (':'|'ise') tc=[func_type_comment] b=block {
+    | 'async' 'işlev' n=NAME t=[type_params] '(' params=[params] ')' a=['->' z=expression { z }] (':'|'ise') tc=[func_type_comment] b=block {
         CHECK_VERSION(stmt_ty, 5, "Async functions are", _PyAST_AsyncFunctionDef(n->v.Name.id, (params) ? params : CHECK(arguments_ty, _PyPegen_empty_arguments(p)), b, NULL, a, NEW_TYPE_COMMENT(p, tc), t, EXTRA)) }
     | 'async' 'def' n=NAME t=[type_params] '(' params=[params] ')' a=['->' z=expression { z }] (':'|'ise') tc=[func_type_comment] b=block {
         CHECK_VERSION(stmt_ty, 5, "Async functions are", _PyAST_AsyncFunctionDef(n->v.Name.id, (params) ? params : CHECK(arguments_ty, _PyPegen_empty_arguments(p)), b, NULL, a, NEW_TYPE_COMMENT(p, tc), t, EXTRA)) }
@@ -395,10 +395,10 @@ if_stmt[stmt_ty]:
     | invalid_if_stmt
     | 'if' a=named_expression (':'|'ise') b=block c=elif_stmt {
         _PyAST_If(a, b, CHECK(asdl_stmt_seq*, _PyPegen_singleton_seq(p, c)), EXTRA) }
-    | "eğer" a=named_expression (':'|'ise') b=block c=elif_stmt {
+    | 'eğer' a=named_expression (':'|'ise') b=block c=elif_stmt {
         _PyAST_If(a, b, CHECK(asdl_stmt_seq*, _PyPegen_singleton_seq(p, c)), EXTRA) }
     | 'if' a=named_expression (':'|'ise') b=block c=[else_block] { _PyAST_If(a, b, c, EXTRA) }
-    | "eğer" a=named_expression (':'|'ise') b=block c=[else_block] { _PyAST_If(a, b, c, EXTRA) }
+    | 'eğer' a=named_expression (':'|'ise') b=block c=[else_block] { _PyAST_If(a, b, c, EXTRA) }
 elif_stmt[stmt_ty]:
     | invalid_elif_stmt
     | 'elif' a=named_expression (':'|'ise') b=block c=elif_stmt {
@@ -406,7 +406,7 @@ elif_stmt[stmt_ty]:
     | 'elif' a=named_expression (':'|'ise') b=block c=[else_block] { _PyAST_If(a, b, c, EXTRA) }
 else_block[asdl_stmt_seq*]:
     | invalid_else_stmt
-    | ('else' | "değilse") &&(':'|'ise') b=block { b }
+    | ('else' | 'değilse') &&(':'|'ise') b=block { b }
 
 # While statement
 # ---------------
@@ -420,13 +420,13 @@ while_stmt[stmt_ty]:
 
 for_stmt[stmt_ty]:
     | invalid_for_stmt
-    | 'for' t=star_targets ('in'|"içinde") ~ ex=star_expressions (':'|'ise') tc=[TYPE_COMMENT] b=block el=[else_block] {
+    | 'for' t=star_targets ('in'|'içinde') ~ ex=star_expressions (':'|'ise') tc=[TYPE_COMMENT] b=block el=[else_block] {
         _PyAST_For(t, ex, b, el, NEW_TYPE_COMMENT(p, tc), EXTRA) }
-    | 'ozyinele' t=star_targets ('in'|"içinde") ~ ex=star_expressions (':'|'ise') tc=[TYPE_COMMENT] b=block el=[else_block] {
+    | 'ozyinele' t=star_targets ('in'|'içinde') ~ ex=star_expressions (':'|'ise') tc=[TYPE_COMMENT] b=block el=[else_block] {
         _PyAST_For(t, ex, b, el, NEW_TYPE_COMMENT(p, tc), EXTRA) }
-    | 'async' 'for' t=star_targets ('in'|"içinde") ~ ex=star_expressions (':'|'ise') tc=[TYPE_COMMENT] b=block el=[else_block] {
+    | 'async' 'for' t=star_targets ('in'|'içinde') ~ ex=star_expressions (':'|'ise') tc=[TYPE_COMMENT] b=block el=[else_block] {
         CHECK_VERSION(stmt_ty, 5, "Async for loops are", _PyAST_AsyncFor(t, ex, b, el, NEW_TYPE_COMMENT(p, tc), EXTRA)) }
-    | 'async' 'ozyinele' t=star_targets ('in'|"içinde") ~ ex=star_expressions (':'|'ise') tc=[TYPE_COMMENT] b=block el=[else_block] {
+    | 'async' 'ozyinele' t=star_targets ('in'|'içinde') ~ ex=star_expressions (':'|'ise') tc=[TYPE_COMMENT] b=block el=[else_block] {
         CHECK_VERSION(stmt_ty, 5, "Async for loops are", _PyAST_AsyncFor(t, ex, b, el, NEW_TYPE_COMMENT(p, tc), EXTRA)) }
     | invalid_for_target
 
@@ -735,13 +735,13 @@ expression[expr_ty] (memo):
     | lambdef
 
 if_expression[expr_ty]:
-    | a=disjunction ('if'|"eğer") b=disjunction ('else'|'degilse') c=expression { _PyAST_IfExp(b, a, c, EXTRA) }
+    | a=disjunction ('if'|'eğer') b=disjunction ('else'|'değilse') c=expression { _PyAST_IfExp(b, a, c, EXTRA) }
 
 yield_expr[expr_ty]:
     | 'yield' 'from' a=expression { _PyAST_YieldFrom(a, EXTRA) }
-    | "döndürdur" 'from' a=expression { _PyAST_YieldFrom(a, EXTRA) }
+    | 'döndürdur' 'from' a=expression { _PyAST_YieldFrom(a, EXTRA) }
     | 'yield' a=[star_expressions] { _PyAST_Yield(a, EXTRA) }
-    | "döndürdur" a=[star_expressions] { _PyAST_Yield(a, EXTRA) }
+    | 'döndürdur' a=[star_expressions] { _PyAST_Yield(a, EXTRA) }
 
 star_expressions[expr_ty]:
     | a=star_expression b=(',' c=star_expression { c })+ [','] {
@@ -824,8 +824,8 @@ lte_bitwise_or[CmpopExprPair*]: '<=' a=bitwise_or { _PyPegen_cmpop_expr_pair(p, 
 lt_bitwise_or[CmpopExprPair*]: '<' a=bitwise_or { _PyPegen_cmpop_expr_pair(p, Lt, a) }
 gte_bitwise_or[CmpopExprPair*]: '>=' a=bitwise_or { _PyPegen_cmpop_expr_pair(p, GtE, a) }
 gt_bitwise_or[CmpopExprPair*]: '>' a=bitwise_or { _PyPegen_cmpop_expr_pair(p, Gt, a) }
-notin_bitwise_or[CmpopExprPair*]: 'not' 'in' a=bitwise_or { _PyPegen_cmpop_expr_pair(p, NotIn, a) }
-in_bitwise_or[CmpopExprPair*]: 'in' a=bitwise_or { _PyPegen_cmpop_expr_pair(p, In, a) }
+notin_bitwise_or[CmpopExprPair*]: 'not' ('in'|'içinde') a=bitwise_or { _PyPegen_cmpop_expr_pair(p, NotIn, a) }
+in_bitwise_or[CmpopExprPair*]: ('in'|'içinde') a=bitwise_or { _PyPegen_cmpop_expr_pair(p, In, a) }
 isnot_bitwise_or[CmpopExprPair*]: ('is' 'not' | 'denk' 'degilse') a=bitwise_or { _PyPegen_cmpop_expr_pair(p, IsNot, a) }
 is_bitwise_or[CmpopExprPair*]: ('is'|'denkse') a=bitwise_or { _PyPegen_cmpop_expr_pair(p, Is, a) }
 
@@ -1062,9 +1062,9 @@ for_if_clauses[asdl_comprehension_seq*]:
     | a[asdl_comprehension_seq*]=for_if_clause+ { a }
 
 for_if_clause[comprehension_ty]:
-    | 'async' 'for' a=star_targets 'in' ~ b=disjunction c[asdl_expr_seq*]=('if' z=disjunction { z })* {
+    | 'async' ('for'|'ozyinele') a=star_targets ('in'|'içinde') ~ b=disjunction c[asdl_expr_seq*]=('if' z=disjunction { z })* {
         CHECK_VERSION(comprehension_ty, 6, "Async comprehensions are", _PyAST_comprehension(a, b, c, 1, p->arena)) }
-    | 'for' a=star_targets 'in' ~ b=disjunction c[asdl_expr_seq*]=('if' z=disjunction { z })* {
+    | ('for'|'ozyinele') a=star_targets ('in'|'içinde') ~ b=disjunction c[asdl_expr_seq*]=('if' z=disjunction { z })* {
         _PyAST_comprehension(a, b, c, 0, p->arena) }
     | invalid_for_if_clause
     | invalid_for_target

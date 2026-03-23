@@ -161,7 +161,7 @@ growable_comment_array_deallocate(growable_comment_array *arr) {
 static int
 _get_keyword_or_name_type(Parser *p, struct token *new_token)
 {
-    Py_ssize_t name_len = new_token->end_col_offset - new_token->col_offset;
+    Py_ssize_t name_len = new_token->end - new_token->start;
     assert(name_len > 0);
 
     if (name_len >= p->n_keyword_lists ||

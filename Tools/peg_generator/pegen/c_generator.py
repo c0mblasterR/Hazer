@@ -191,7 +191,7 @@ class CCallMakerVisitor(GrammarVisitor):
 
     def visit_StringLeaf(self, node: StringLeaf) -> FunctionCall:
         val = ast.literal_eval(node.value)
-        if re.match(r"[a-zA-Z_]\w*\Z", val):  # This is a keyword
+        if val.isidentifier():  # This is a keyword (Unicode-aware)
             if node.value.endswith("'"):
                 return self.keyword_helper(val)
             else:
@@ -496,7 +496,7 @@ class CParserGenerator(ParserGenerator, GrammarVisitor):
     def _group_keywords_by_length(self) -> dict[int, list[tuple[str, int]]]:
         groups: dict[int, list[tuple[str, int]]] = {}
         for keyword_str, keyword_type in self.keywords.items():
-            length = len(keyword_str)
+            length = len(keyword_str.encode("utf-8"))
             if length in groups:
                 groups[length].append((keyword_str, keyword_type))
             else:
@@ -505,7 +505,7 @@ class CParserGenerator(ParserGenerator, GrammarVisitor):
 
     def _setup_keywords(self) -> None:
         n_keyword_lists = (
-            len(max(self.keywords.keys(), key=len)) + 1 if len(self.keywords) > 0 else 0
+            max(len(k.encode("utf-8")) for k in self.keywords.keys()) + 1 if len(self.keywords) > 0 else 0
         )
         self.print(f"static const int n_keyword_lists = {n_keyword_lists};")
         groups = self._group_keywords_by_length()

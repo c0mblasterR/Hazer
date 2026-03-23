@@ -1,0 +1,178 @@
+# Hazer v0.4.0 — Regression Test
+# UTF-8 Hard Keywords + toplam + ternary + membership + comprehension
+
+yazdir("=" * 55)
+yazdir("Hazer v0.4.0 — Regression Test")
+yazdir("=" * 55)
+
+hatalar = []
+
+işlev test_et(isim, sonuc, beklenen) ise
+    eğer sonuc == beklenen ise
+        yazdir(f"  ✓ {isim}")
+    değilse ise
+        yazdir(f"  ✗ {isim} (beklenen: {beklenen}, gelen: {sonuc})")
+        hatalar.ekle(isim)
+
+# --- eğer / değilse ---
+yazdir("\n🔑 eğer / değilse")
+
+eğer Dogru ise
+    x = "eğer çalışıyor"
+değilse ise
+    x = "hata"
+test_et("eğer/değilse temel", x, "eğer çalışıyor")
+
+eğer Yanlis ise
+    y = "hata"
+değilse ise
+    y = "değilse çalışıyor"
+test_et("değilse dalı", y, "değilse çalışıyor")
+
+# --- Ternary ---
+yazdir("\n🔑 Ternary (x eğer koşul değilse y)")
+
+a = "uzun" eğer 10 > 5 değilse "kısa"
+test_et("ternary doğru dal", a, "uzun")
+
+b = "uzun" eğer 10 < 5 değilse "kısa"
+test_et("ternary yanlış dal", b, "kısa")
+
+c = "pozitif" eğer 42 > 0 değilse "negatif"
+test_et("ternary ifade içinde", c, "pozitif")
+
+# --- Membership ---
+yazdir("\n🔑 Membership (içinde / not içinde)")
+
+test_et("string içinde",  "a" içinde "abc",      Dogru)
+test_et("liste içinde",   1 içinde [1, 2, 3],     Dogru)
+test_et("demet içinde",   3 içinde (1, 2, 3),     Dogru)
+test_et("yok içinde",     9 içinde [1, 2, 3],     Yanlis)
+test_et("not içinde",     "z" not içinde "abc",   Dogru)
+test_et("not içinde 2",   5 not içinde [1, 2, 3], Dogru)
+
+# --- işlev / döndür ---
+yazdir("\n🔑 işlev / döndür")
+
+işlev topla(a, b) ise
+    döndür a + b
+
+test_et("işlev/döndür", topla(3, 4), 7)
+
+işlev faktoriyel(n) ise
+    eğer n <= 1 ise
+        döndür 1
+    değilse ise
+        döndür n * faktoriyel(n - 1)
+
+test_et("özyinelemeli işlev", faktoriyel(5), 120)
+
+# --- içinde (for döngüsü) ---
+yazdir("\n🔑 içinde (for döngüsü)")
+
+toplam_i = 0
+ozyinele i içinde aralik(5) ise
+    toplam_i = toplam_i + i
+test_et("içinde döngü", toplam_i, 10)
+
+# --- Comprehension ---
+yazdir("\n🔑 Comprehension")
+
+test_et("list comp for içinde",      [i * 2 for i içinde aralik(4)],           [0, 2, 4, 6])
+test_et("list comp ozyinele içinde", [i ozyinele i içinde aralik(3)],           [0, 1, 2])
+test_et("list comp if filtre",       [i for i içinde aralik(6) if i % 2 == 0],  [0, 2, 4])
+test_et("set comp",                  {i for i içinde aralik(3)},                {0, 1, 2})
+test_et("dict comp",                 {i: i*i for i içinde aralik(4)},           {0:0, 1:1, 2:4, 3:9})
+test_et("generator",                 liste(i+1 for i içinde aralik(3)),         [1, 2, 3])
+
+# --- kaçış / sürdür ---
+yazdir("\n🔑 kaçış / sürdür")
+
+sayac = 0
+ozyinele i içinde aralik(10) ise
+    eğer i == 5 ise
+        kaçış
+    sayac = sayac + 1
+test_et("kaçış", sayac, 5)
+
+cift_toplam = 0
+ozyinele i içinde aralik(10) ise
+    eğer i % 2 != 0 ise
+        sürdür
+    cift_toplam = cift_toplam + i
+test_et("sürdür", cift_toplam, 20)
+
+# --- fırlat / dene / yakala ---
+yazdir("\n🔑 fırlat / dene / yakala")
+
+dene ise
+    fırlat ValueError("test hatası")
+yakala ValueError olarak e ise
+    test_et("fırlat/yakala", dizgi(e), "test hatası")
+
+# --- sınıf ---
+yazdir("\n🔑 sınıf")
+
+sınıf Nokta ise
+    işlev __init__(kendi, x, y) ise
+        kendi.x = x
+        kendi.y = y
+    işlev uzaklik(kendi) ise
+        temin matematik
+        döndür matematik.karekök(kendi.x**2 + kendi.y**2)
+
+n = Nokta(3, 4)
+test_et("sınıf tanımı", n.x, 3)
+test_et("sınıf metodu", n.uzaklik(), 5.0)
+
+# --- döndürdur ---
+yazdir("\n🔑 döndürdur")
+
+işlev üreteç() ise
+    döndürdur 1
+    döndürdur 2
+    döndürdur 3
+
+test_et("döndürdur", liste(üreteç()), [1, 2, 3])
+
+# --- toplam ---
+yazdir("\n🔢 toplam")
+
+test_et("toplam liste",     toplam([1, 2, 3, 4, 5]), 15)
+test_et("toplam başlangıç", toplam([1, 2, 3], 10),   16)
+test_et("toplam boş",       toplam([]),               0)
+test_et("toplam float",     toplam([0.5, 0.5, 1.0]), 2.0)
+
+# --- Regression ---
+yazdir("\n🔄 Regression")
+
+i = 0
+iken i < 5 ise
+    i = i + 1
+test_et("iken", i, 5)
+
+test_et("ve",    Dogru ve Dogru,    Dogru)
+test_et("veya",  Yanlis veya Dogru, Dogru)
+test_et("degil", degil Yanlis,      Dogru)
+
+nihayet_cagrildi = Yanlis
+dene ise
+    gecici = 1 / 1
+nihayet ise
+    nihayet_cagrildi = Dogru
+test_et("nihayet", nihayet_cagrildi, Dogru)
+
+temin matematik
+test_et("temin matematik", matematik.pi > 3, Dogru)
+
+temin rastgele
+rastgele.tohum(42)
+test_et("temin rastgele", rastgele.tam_sayi(1, 100) > 0, Dogru)
+
+# --- Sonuç ---
+yazdir("\n" + "=" * 55)
+eğer uzunluk(hatalar) == 0 ise
+    yazdir("✅ Tüm testler geçti!")
+değilse ise
+    yazdir(f"❌ {uzunluk(hatalar)} test başarısız: {hatalar}")
+yazdir("=" * 55)
