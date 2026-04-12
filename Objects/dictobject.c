@@ -4784,6 +4784,18 @@ static PyMethodDef mapp_methods[] = {
     DICT_COPY_METHODDEF
     DICT___REVERSED___METHODDEF
     {"__class_getitem__", Py_GenericAlias, METH_O|METH_CLASS, PyDoc_STR("See PEP 585")},
+    /* Hazer v0.5.0 — sözlük Turkish Aliases */
+    {"temizle", (PyCFunction)dict_clear, METH_NOARGS, dict_clear__doc__},
+    {"kopyala", (PyCFunction)dict_copy, METH_NOARGS, dict_copy__doc__},
+    {"anahtarlardan", _PyCFunction_CAST(dict_fromkeys), METH_FASTCALL|METH_CLASS, dict_fromkeys__doc__},
+    {"al", _PyCFunction_CAST(dict_get), METH_FASTCALL, dict_get__doc__},
+    {"ögeler", (PyCFunction)dict_items, METH_NOARGS, dict_items__doc__},
+    {"anahtarlar", (PyCFunction)dict_keys, METH_NOARGS, dict_keys__doc__},
+    {"çıkar", _PyCFunction_CAST(dict_pop), METH_FASTCALL, dict_pop__doc__},
+    {"öge_çıkar", (PyCFunction)dict_popitem, METH_NOARGS, dict_popitem__doc__},
+    {"varsayılan_ata", _PyCFunction_CAST(dict_setdefault), METH_FASTCALL, dict_setdefault__doc__},
+    {"güncelle", _PyCFunction_CAST(dict_update), METH_VARARGS|METH_KEYWORDS, update__doc__},
+    {"değerler", (PyCFunction)dict_values, METH_NOARGS, dict_values__doc__},
     {NULL,              NULL}   /* sentinel */
 };
 
